@@ -1,4 +1,5 @@
 from opencage.geocoder import OpenCageGeocode
+from sound import sound_playback
 import requests
 
 key = 'ea0bf2d504184284aea00c654a7d223c'
@@ -21,7 +22,7 @@ def get_weather_data(weather_parameters):
 
     hourly_weather_data = parse_hourly_weather_data(weather_data_dictionary)
 
-    print(hourly_weather_data)
+    sound_playback(hourly_weather_data)
 
 
 def get_city_coordinates(city):
@@ -40,7 +41,7 @@ def parse_hourly_weather_data(weather_data):
     hourly_wind_speed = []
 
     for data in hourly_weather_data:
-        hourly_temperatures.append(data['temperature'])
-        hourly_wind_speed.append(data['windSpeed'])
+        hourly_temperatures.append(int(data['temperature']))
+        hourly_wind_speed.append(int(data['windSpeed']))
 
     return [hourly_temperatures, hourly_wind_speed]
