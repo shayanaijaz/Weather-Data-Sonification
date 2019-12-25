@@ -1,6 +1,5 @@
-from pydub import AudioSegment, effects
-from pydub.playback import play
-import simpleaudio as sa
+from pydub import AudioSegment
+import os
 
 
 def sound_playback(weather_data):
@@ -44,34 +43,46 @@ def modify_sound(temperatures, wind_speed):
     for speed in wind_speed:
         wind_sound.append(volume_change(wind_sound_effect, speed).fade_in(200).fade_out(200))
 
-    # for sound in wind_sound:
-    #     # sound.fade_in(200).fade_out(200)
-    #     # play(sound)
+
 
     mixed_sounds = []
     for temp_sound, wind_sound in zip(new_sound, wind_sound):
-        # play(temp_sound)
-        # play(wind_sound)
         mixed_sounds.append(temp_sound.overlay(wind_sound))
-
-    # for sounds in mixed_sounds:
-    #     play(sounds.fade_in(200).fade_out(200))
 
     silent_sound = (wind_sound_effect - 100)[:5000]
 
-    print(mixed_sounds[0].frame_count())
-    print(silent_sound.frame_count())
 
     channel1 = mixed_sounds[0]
-    channel2 = mixed_sounds[7]
+    channel2 = mixed_sounds[1]
+    channel3 = mixed_sounds[2]
+    channel4 = mixed_sounds[3]
+    channel5 = mixed_sounds[4]
+    channel6 = mixed_sounds[5]
+    channel7 = mixed_sounds[6]
+    channel8 = mixed_sounds[7]
 
-    stereo_sound1 = AudioSegment.from_mono_audiosegments(silent_sound, channel2)
-    stereo_sound2 = AudioSegment.from_mono_audiosegments(channel1, silent_sound)
-    play(stereo_sound1)
-    play(stereo_sound2)
-    # stereo_sound.export("test.wav", format="wav")
+    multi_audio1 = AudioSegment.from_mono_audiosegments(channel1, silent_sound, silent_sound, silent_sound,
+                                                        silent_sound, silent_sound, silent_sound, silent_sound)
+    multi_audio2 = AudioSegment.from_mono_audiosegments(silent_sound, channel2, silent_sound, silent_sound,
+                                                        silent_sound, silent_sound, silent_sound, silent_sound)
+    multi_audio3 = AudioSegment.from_mono_audiosegments(silent_sound, silent_sound, channel3, silent_sound,
+                                                        silent_sound, silent_sound, silent_sound, silent_sound)
+    multi_audio4 = AudioSegment.from_mono_audiosegments(silent_sound, silent_sound, silent_sound, channel4,
+                                                        silent_sound, silent_sound, silent_sound, silent_sound)
+    multi_audio5 = AudioSegment.from_mono_audiosegments(silent_sound, silent_sound, silent_sound, silent_sound,
+                                                        channel5, silent_sound, silent_sound, silent_sound)
+    multi_audio6 = AudioSegment.from_mono_audiosegments(silent_sound, silent_sound, silent_sound, silent_sound,
+                                                        silent_sound, channel6, silent_sound, silent_sound)
+    multi_audio7 = AudioSegment.from_mono_audiosegments(silent_sound, silent_sound, silent_sound, silent_sound,
+                                                        silent_sound, silent_sound, channel7, silent_sound)
+    multi_audio8 = AudioSegment.from_mono_audiosegments(silent_sound, silent_sound, silent_sound, silent_sound,
+                                                        silent_sound, silent_sound, silent_sound, channel8)
 
+    final_sound = multi_audio1 + multi_audio2 + multi_audio3 + multi_audio4 + multi_audio5 + multi_audio6 + multi_audio7 + multi_audio8
 
+    final_sound.export("final.wav", format="wav")
+
+    os.startfile("final.wav")
 
 
 def volume_change(sound, wind_speed):
@@ -91,25 +102,3 @@ def speed_change(sound, temperature):
     # so that regular playback programs will work right. They often only
     # know how to play audio at standard frame rate (like 44.1k)
     return sound_with_altered_frame_rate.set_frame_rate(sound.frame_rate)
-
-#
-# slow_sound = speed_change(sound, 0.75)
-# fast_sound = speed_change(sound, 2.0)
-# # chipmunk_sound = pitch_change(sound)
-#
-# print(len(sound))
-# # print(len(chipmunk_sound))
-#
-# chipmunk_sound = speed_change(sound, 0.40)
-# # chipmunk_sound = pitch_change(sound, 0.5 / 12)
-#
-#
-# print(len(chipmunk_sound))
-#
-# # chipmunk_sound = effects.normalize(chipmunk_sound)
-#
-# play(chipmunk_sound.fade_in(500).fade_out(500) * 5)
-
-# sound = AudioSegment.from_file('wind.wav')
-#
-# play(sound.fade_in(200).fade_out(200) + 15)
